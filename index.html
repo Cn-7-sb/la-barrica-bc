@@ -43,6 +43,14 @@ nav.scrolled{background:rgba(18,13,10,.85);backdrop-filter:blur(14px);box-shadow
 .logo-mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));
   display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:1.25rem;color:#1a120b;
   box-shadow:0 8px 24px rgba(232,161,61,.35)}
+
+  .logo-mark img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+  
 .logo-text{line-height:1.05}
 .logo-text b{font-family:'Playfair Display',serif;font-size:1.3rem;letter-spacing:.5px;display:block}
 .logo-text span{font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
@@ -309,7 +317,9 @@ footer{border-top:1px solid var(--line);padding:48px clamp(18px,6vw,80px) 32px;b
 <!-- NAV -->
 <nav id="nav">
   <a class="logo" href="#topo">
-    <div class="logo-mark">B</div>
+    <div class="logo-mark">
+  <img src="la-barrica-logo.png" alt="La Barrica">
+</div>
     <div class="logo-text"><b>La Barrica</b><span>Pizzaria · Cantina</span></div>
   </a>
   <div class="nav-links" id="navLinks">
