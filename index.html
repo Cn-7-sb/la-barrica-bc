@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Barrica — Pizzaria & Cantina · Balneário Camboriú</title>
+<meta name="description" content="La Barrica: pizzaria e cantina tradicional em Balneário Camboriú. Rodízio de pizzas, massas, frango a passarinho e o melhor espaço kids da região. Peça direto pelo site!">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --bg:#120d0a;
+  --bg2:#1c1410;
+  --bg3:#241a13;
+  --card:#211812;
+  --line:rgba(255,200,120,.12);
+  --accent:#e8a13d;
+  --accent2:#c96f1f;
+  --accent3:#f5c877;
+  --cream:#f5ead9;
+  --muted:#b8a48c;
+  --red:#c0392b;
+  --green:#27ae60;
+  --radius:18px;
+  --shadow:0 20px 60px rgba(0,0,0,.45);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden}
+::selection{background:var(--accent);color:#1a120b}
+h1,h2,h3,.serif{font-family:'Playfair Display',serif}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+/* ---------- NAV ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;
+  padding:14px clamp(16px,5vw,64px);transition:background .35s ease,box-shadow .35s ease,padding .35s ease}
+nav.scrolled{background:rgba(18,13,10,.85);backdrop-filter:blur(14px);box-shadow:0 8px 30px rgba(0,0,0,.4);padding:10px clamp(16px,5vw,64px)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:1.25rem;color:#1a120b;
+  box-shadow:0 8px 24px rgba(232,161,61,.35)}
+.logo-text{line-height:1.05}
+.logo-text b{font-family:'Playfair Display',serif;font-size:1.3rem;letter-spacing:.5px;display:block}
+.logo-text span{font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.nav-links{display:flex;gap:34px;align-items:center}
+.nav-links a{font-size:.85rem;font-weight:500;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);position:relative;transition:color .25s}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;background:var(--accent);transition:width .3s ease}
+.nav-links a:hover{color:var(--cream)}
+.nav-links a:hover::after{width:100%}
+.btn-cart{position:relative;display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#1a120b;font-weight:700;font-size:.85rem;padding:11px 20px;border-radius:999px;transition:transform .25s,box-shadow .25s;box-shadow:0 8px 24px rgba(232,161,61,.3)}
+.btn-cart:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(232,161,61,.5)}
+.cart-count{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;font-size:.7rem;font-weight:700;
+  min-width:20px;height:20px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding:0 5px;
+  transition:transform .3s cubic-bezier(.68,-.55,.27,1.55)}
+.cart-count.pop{transform:scale(1.5)}
+.burger{display:none;flex-direction:column;gap:5px;padding:6px}
+.burger span{width:26px;height:2px;background:var(--cream);border-radius:2px;transition:all .3s}
+
+/* ---------- HERO ---------- */
+.hero{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:120px 20px 80px}
+.hero-bg{position:absolute;inset:0;background:
+  radial-gradient(ellipse 80% 55% at 50% -10%,rgba(232,161,61,.22),transparent 60%),
+  radial-gradient(ellipse 60% 50% at 85% 90%,rgba(201,111,31,.14),transparent 60%),
+  var(--bg)}
+.hero-grain{position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E")}
+.hero-pizza{position:absolute;width:min(78vw,720px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,rgba(232,161,61,.14),transparent 62%);
+  top:50%;left:50%;transform:translate(-50%,-52%);pointer-events:none}
+.hero-pizza svg{width:100%;height:100%;opacity:.16;animation:spin 90s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-content{position:relative;z-index:2;max-width:860px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.75rem;letter-spacing:4px;text-transform:uppercase;color:var(--accent3);
+  border:1px solid var(--line);padding:9px 20px;border-radius:999px;background:rgba(232,161,61,.06);margin-bottom:28px}
+.hero-eyebrow::before,.hero-eyebrow::after{content:"";width:24px;height:1px;background:var(--accent);opacity:.6}
+.hero h1{font-size:clamp(2.6rem,7.5vw,5.4rem);font-weight:900;line-height:1.05;letter-spacing:-1px}
+.hero h1 em{font-style:italic;background:linear-gradient(120deg,var(--accent3),var(--accent),var(--accent2));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{margin:26px auto 40px;max-width:560px;color:var(--muted);font-size:clamp(1rem,1.6vw,1.15rem);line-height:1.75;font-weight:300}
+.hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#1a120b;font-weight:700;font-size:.95rem;
+  padding:17px 38px;border-radius:999px;display:inline-flex;align-items:center;gap:10px;transition:transform .25s,box-shadow .25s;box-shadow:0 12px 36px rgba(232,161,61,.35)}
+.btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 18px 48px rgba(232,161,61,.5)}
+.btn-outline{border:1px solid rgba(245,200,119,.35);color:var(--cream);font-weight:600;font-size:.95rem;padding:17px 38px;
+  border-radius:999px;display:inline-flex;align-items:center;gap:10px;transition:all .25s;background:rgba(255,255,255,.02)}
+.btn-outline:hover{border-color:var(--accent);background:rgba(232,161,61,.08);transform:translateY(-3px)}
+.hero-stats{display:flex;gap:clamp(24px,6vw,72px);justify-content:center;margin-top:64px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat b{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,3.5vw,2.5rem);color:var(--accent3);display:block}
+.stat span{font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted)}
+.scroll-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:var(--muted);font-size:.68rem;letter-spacing:3px;text-transform:uppercase;z-index:2}
+.scroll-hint .mouse{width:24px;height:40px;border:1.5px solid rgba(245,200,119,.4);border-radius:14px;position:relative}
+.scroll-hint .mouse::after{content:"";position:absolute;top:8px;left:50%;width:3px;height:7px;margin-left:-1.5px;border-radius:3px;
+  background:var(--accent);animation:wheel 1.8s ease-in-out infinite}
+@keyframes wheel{0%{transform:translateY(0);opacity:1}70%{transform:translateY(12px);opacity:0}100%{opacity:0}}
+
+/* ---------- MARQUEE ---------- */
+.marquee{background:linear-gradient(90deg,var(--accent2),var(--accent));padding:14px 0;overflow:hidden;transform:rotate(-1.2deg) scale(1.02);margin:-8px 0 0}
+.marquee-track{display:flex;gap:48px;white-space:nowrap;animation:marquee 26s linear infinite}
+.marquee-track span{font-weight:800;font-size:.85rem;letter-spacing:3px;text-transform:uppercase;color:#1a120b;display:flex;align-items:center;gap:48px}
+.marquee-track i{font-style:normal;opacity:.55}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ---------- SECTIONS ---------- */
+section{padding:clamp(70px,10vw,120px) clamp(18px,6vw,80px);position:relative}
+.section-inner{max-width:1180px;margin:0 auto}
+.section-tag{display:inline-flex;align-items:center;gap:10px;font-size:.72rem;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.section-tag::before{content:"";width:34px;height:1px;background:var(--accent)}
+.section-title{font-size:clamp(2rem,4.6vw,3.4rem);font-weight:800;line-height:1.1;margin-bottom:18px}
+.section-title em{font-style:italic;color:var(--accent3)}
+.section-sub{color:var(--muted);max-width:600px;line-height:1.75;font-weight:300}
+
+/* reveal animation */
+.reveal{opacity:0;transform:translateY(42px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}.reveal.d4{transition-delay:.32s}
+
+/* ---------- ABOUT ---------- */
+.about-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,6vw,72px);align-items:center}
+.about-visual{position:relative}
+.about-frame{border-radius:var(--radius);overflow:hidden;position:relative;aspect-ratio:4/4.6;background:
+  linear-gradient(160deg,#2c1e12,#1a110b 70%);box-shadow:var(--shadow)}
+.about-frame::before{content:"🍕";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(6rem,14vw,10rem);filter:drop-shadow(0 24px 40px rgba(0,0,0,.5))}
+.about-frame .glow{position:absolute;width:200%;height:200%;top:-50%;left:-50%;background:radial-gradient(circle,rgba(232,161,61,.25),transparent 60%);animation:glowmove 9s ease-in-out infinite alternate}
+@keyframes glowmove{from{transform:translate(-12%,-8%)}to{transform:translate(12%,10%)}}
+.badge-float{position:absolute;background:rgba(30,21,14,.92);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;
+  padding:14px 18px;box-shadow:0 14px 36px rgba(0,0,0,.4);display:flex;align-items:center;gap:12px;animation:floaty 5s ease-in-out infinite}
+.badge-float .ic{font-size:1.6rem}
+.badge-float b{display:block;font-size:.9rem}
+.badge-float span{font-size:.72rem;color:var(--muted)}
+.bf1{top:-18px;right:-14px}
+.bf2{bottom:-18px;left:-14px;animation-delay:2.4s}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.about-list{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:34px}
+.about-item{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:18px 20px;transition:transform .3s,border-color .3s}
+.about-item:hover{transform:translateY(-5px);border-color:rgba(232,161,61,.4)}
+.about-item .ic{font-size:1.5rem;margin-bottom:10px;display:block}
+.about-item b{font-size:.92rem;display:block;margin-bottom:4px}
+.about-item span{font-size:.78rem;color:var(--muted);line-height:1.5;display:block}
+
+/* ---------- MENU ---------- */
+#cardapio{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 30%,var(--bg) 100%)}
+.menu-head{text-align:center;max-width:680px;margin:0 auto 48px}
+.menu-head .section-tag{justify-content:center}
+.menu-head .section-tag::after{content:"";width:34px;height:1px;background:var(--accent)}
+.tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:44px}
+.tab{padding:12px 26px;border-radius:999px;border:1px solid var(--line);color:var(--muted);font-weight:600;font-size:.88rem;
+  background:rgba(255,255,255,.02);transition:all .3s;display:flex;align-items:center;gap:8px}
+.tab:hover{color:var(--cream);border-color:rgba(232,161,61,.45)}
+.tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#1a120b;border-color:transparent;box-shadow:0 10px 28px rgba(232,161,61,.35)}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px}
+.dish{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;
+  transition:transform .35s,border-color .35s,box-shadow .35s;position:relative;overflow:hidden;opacity:0;transform:translateY(26px) scale(.97)}
+.dish.show{opacity:1;transform:none;transition:opacity .5s,transform .5s cubic-bezier(.22,1,.36,1),border-color .35s,box-shadow .35s}
+.dish:hover{transform:translateY(-6px)!important;border-color:rgba(232,161,61,.45);box-shadow:0 18px 44px rgba(0,0,0,.45)}
+.dish .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
+.dish-emoji{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,rgba(232,161,61,.18),rgba(201,111,31,.1));
+  display:flex;align-items:center;justify-content:center;font-size:1.7rem;flex-shrink:0}
+.dish h3{font-size:1.12rem;margin-bottom:4px}
+.dish .desc{font-size:.83rem;color:var(--muted);line-height:1.6;flex:1}
+.dish .foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+.price{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;color:var(--accent3)}
+.price small{font-size:.68rem;font-family:'Inter',sans-serif;color:var(--muted);font-weight:400;display:block;letter-spacing:.5px}
+.tag-best{position:absolute;top:16px;right:-34px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#1a120b;
+  font-size:.62rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:6px 40px;transform:rotate(38deg)}
+.btn-add{display:flex;align-items:center;gap:7px;background:rgba(232,161,61,.12);border:1px solid rgba(232,161,61,.4);color:var(--accent3);
+  font-weight:700;font-size:.8rem;padding:10px 18px;border-radius:999px;transition:all .25s}
+.btn-add:hover{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#1a120b;transform:scale(1.05)}
+.btn-add.added{background:var(--green);border-color:var(--green);color:#fff}
+
+/* ---------- REVIEWS ---------- */
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;margin-top:48px}
+.review{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px;position:relative;transition:transform .3s}
+.review:hover{transform:translateY(-5px)}
+.review .stars{color:var(--accent);letter-spacing:3px;font-size:.95rem;margin-bottom:14px}
+.review p{font-size:.92rem;line-height:1.7;color:#d9cbb6;font-style:italic;margin-bottom:18px}
+.review .who{display:flex;align-items:center;gap:12px}
+.review .avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;font-weight:800;color:#1a120b;font-size:.95rem}
+.review .who b{font-size:.88rem;display:block}
+.review .who span{font-size:.72rem;color:var(--muted)}
+.rating-summary{display:flex;align-items:center;justify-content:center;gap:clamp(20px,5vw,50px);margin-top:56px;flex-wrap:wrap}
+.big-score{text-align:center}
+.big-score b{font-family:'Playfair Display',serif;font-size:4rem;font-weight:900;color:var(--accent3);display:block;line-height:1}
+.big-score span{font-size:.75rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- INFO ---------- */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;margin-top:48px}
+.info-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px;transition:transform .3s,border-color .3s}
+.info-card:hover{transform:translateY(-5px);border-color:rgba(232,161,61,.4)}
+.info-card .ic{font-size:1.8rem;margin-bottom:14px;display:block}
+.info-card h3{font-size:1.05rem;margin-bottom:12px}
+.info-card p, .info-card li{font-size:.85rem;color:var(--muted);line-height:1.8;list-style:none}
+.info-card li::before{content:"✓";color:var(--accent);margin-right:8px;font-weight:700}
+.open-now{display:inline-flex;align-items:center;gap:8px;margin-top:10px;font-size:.8rem;font-weight:600;color:var(--green)}
+.open-now .dot{width:9px;height:9px;border-radius:50%;background:var(--green);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(39,174,96,.5)}70%{box-shadow:0 0 0 9px rgba(39,174,96,0)}100%{box-shadow:0 0 0 0 rgba(39,174,96,0)}}
+
+/* ---------- CTA ---------- */
+.cta-banner{max-width:1180px;margin:0 auto;background:linear-gradient(135deg,#3a2412,#241a13 60%);border:1px solid rgba(232,161,61,.25);
+  border-radius:28px;padding:clamp(44px,7vw,80px);text-align:center;position:relative;overflow:hidden}
+.cta-banner::before{content:"";position:absolute;width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,161,61,.18),transparent 65%);top:-200px;right:-150px}
+.cta-banner h2{font-size:clamp(1.8rem,4vw,3rem);margin-bottom:14px}
+.cta-banner p{color:var(--muted);margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7}
+
+/* ---------- FOOTER ---------- */
+footer{border-top:1px solid var(--line);padding:48px clamp(18px,6vw,80px) 32px;background:var(--bg2)}
+.footer-inner{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.footer-inner p{font-size:.82rem;color:var(--muted);line-height:1.8;max-width:340px;margin-top:12px}
+.footer-col h4{font-size:.78rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.footer-col a{display:block;font-size:.85rem;color:var(--muted);margin-bottom:10px;transition:color .25s}
+.footer-col a:hover{color:var(--cream)}
+.copy{text-align:center;font-size:.75rem;color:#6f6152;margin-top:44px;padding-top:24px;border-top:1px solid var(--line)}
+
+/* ---------- CART DRAWER ---------- */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:300;opacity:0;pointer-events:none;transition:opacity .35s}
+.overlay.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(430px,100vw);background:var(--bg2);z-index:310;display:flex;flex-direction:column;
+  transform:translateX(105%);transition:transform .45s cubic-bezier(.22,1,.36,1);box-shadow:-24px 0 60px rgba(0,0,0,.5)}
+.drawer.open{transform:none}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:22px 24px;border-bottom:1px solid var(--line)}
+.drawer-head h3{font-size:1.3rem}
+.drawer-close{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .25s}
+.drawer-close:hover{border-color:var(--accent);color:var(--accent);transform:rotate(90deg)}
+.drawer-items{flex:1;overflow-y:auto;padding:18px 24px}
+.empty-cart{text-align:center;color:var(--muted);padding:60px 10px;font-size:.9rem}
+.empty-cart span{font-size:3rem;display:block;margin-bottom:16px}
+.cart-item{display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);animation:slideIn .35s ease}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+.cart-item .ci-emoji{font-size:1.7rem;width:48px;height:48px;border-radius:12px;background:rgba(232,161,61,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cart-item .ci-info{flex:1}
+.cart-item b{font-size:.9rem;display:block}
+.cart-item small{color:var(--muted);font-size:.75rem}
+.qty{display:flex;align-items:center;gap:10px}
+.qty button{width:26px;height:26px;border-radius:8px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:.95rem;transition:all .2s}
+.qty button:hover{border-color:var(--accent);color:var(--accent)}
+.qty span{min-width:16px;text-align:center;font-weight:700;font-size:.9rem}
+.ci-price{font-weight:700;color:var(--accent3);font-size:.9rem;min-width:70px;text-align:right}
+.ci-remove{color:#7a6a58;font-size:1rem;margin-left:8px;transition:color .2s}
+.ci-remove:hover{color:var(--red)}
+.drawer-foot{padding:20px 24px 26px;border-top:1px solid var(--line);background:var(--bg3)}
+.delivery-opts{display:flex;gap:10px;margin-bottom:16px}
+.delivery-opts label{flex:1;text-align:center;padding:11px;border-radius:12px;border:1px solid var(--line);font-size:.8rem;font-weight:600;cursor:pointer;transition:all .25s;color:var(--muted)}
+.delivery-opts input{display:none}
+.delivery-opts input:checked+span{color:var(--accent3)}
+.delivery-opts label:has(input:checked){border-color:var(--accent);background:rgba(232,161,61,.12);color:var(--accent3)}
+.total-row{display:flex;justify-content:space-between;font-size:.9rem;color:var(--muted);margin-bottom:6px}
+.total-row.grand{font-size:1.15rem;font-weight:800;color:var(--cream);margin:12px 0 18px}
+.total-row.grand b{font-family:'Playfair Display',serif;color:var(--accent3)}
+.field{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:13px 16px;color:var(--cream);
+  font-family:inherit;font-size:.88rem;margin-bottom:10px;outline:none;transition:border-color .25s}
+.field:focus{border-color:var(--accent)}
+.field::placeholder{color:#7a6a58}
+.btn-checkout{width:100%;background:linear-gradient(135deg,var(--green),#1d8a4c);color:#fff;font-weight:800;font-size:.95rem;
+  padding:16px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .25s,box-shadow .25s;box-shadow:0 12px 30px rgba(39,174,96,.3)}
+.btn-checkout:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(39,174,96,.45)}
+.btn-checkout:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* toast */
+.toast{position:fixed;bottom:28px;left:50%;transform:translate(-50%,90px);background:var(--card);border:1px solid rgba(232,161,61,.4);
+  padding:14px 26px;border-radius:999px;font-size:.88rem;font-weight:600;z-index:400;transition:transform .45s cubic-bezier(.22,1,.36,1);
+  display:flex;align-items:center;gap:10px;box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.toast.show{transform:translate(-50%,0)}
+
+/* order modal */
+.modal{position:fixed;inset:0;z-index:320;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal.open{opacity:1;pointer-events:auto}
+.modal-box{background:var(--bg2);border:1px solid var(--line);border-radius:24px;max-width:480px;width:100%;padding:36px;
+  max-height:85vh;overflow-y:auto;transform:scale(.92) translateY(20px);transition:transform .4s cubic-bezier(.22,1,.36,1);box-shadow:var(--shadow)}
+.modal.open .modal-box{transform:none}
+.modal-box h3{font-size:1.5rem;margin-bottom:6px}
+.modal-box .sub{color:var(--muted);font-size:.85rem;margin-bottom:22px}
+.order-lines{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:18px}
+.order-line{display:flex;justify-content:space-between;font-size:.85rem;padding:5px 0;color:#d9cbb6}
+.order-line span:last-child{color:var(--accent3);font-weight:600}
+.order-total{display:flex;justify-content:space-between;font-weight:800;font-size:1.05rem;padding-top:10px;border-top:1px dashed var(--line);margin-top:8px}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:900px){
+  .about-grid{grid-template-columns:1fr}
+  .nav-links{position:fixed;inset:0;background:rgba(18,13,10,.97);flex-direction:column;justify-content:center;gap:34px;
+    transform:translateY(-100%);transition:transform .45s cubic-bezier(.22,1,.36,1);z-index:-1}
+  .nav-links.open{transform:none}
+  .nav-links a{font-size:1.2rem}
+  .burger{display:flex}
+  .burger.active span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .burger.active span:nth-child(2){opacity:0}
+  .burger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+}
+@media(max-width:560px){
+  .about-list{grid-template-columns:1fr}
+  .badge-float{padding:10px 14px}
+  .bf1{right:0}.bf2{left:0}
+  .btn-cart span.lbl{display:none}
+  .hero-stats{gap:20px}
+}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="logo" href="#topo">
+    <div class="logo-mark">B</div>
+    <div class="logo-text"><b>La Barrica</b><span>Pizzaria · Cantina</span></div>
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="#sobre">Sobre</a>
+    <a href="#cardapio">Cardápio</a>
+    <a href="#avaliacoes">Avaliações</a>
+    <a href="#infos">Informações</a>
+  </div>
+  <div style="display:flex;gap:12px;align-items:center">
+    <button class="btn-cart" id="openCart">
+      🛒 <span class="lbl">Meu Pedido</span>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="topo">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-pizza">
+    <svg viewBox="0 0 100 100" fill="none" stroke="#e8a13d" stroke-width=".5">
+      <circle cx="50" cy="50" r="48"/><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="14"/>
+      <g><circle cx="50" cy="22" r="3.5"/><circle cx="50" cy="30" r="3.5"/><circle cx="50" cy="37" r="3.5"/>
+      <circle cx="50" cy="63" r="3.5"/><circle cx="50" cy="70" r="3.5"/><circle cx="50" cy="78" r="3.5"/>
+      <circle cx="22" cy="50" r="3.5"/><circle cx="30" cy="50" r="3.5"/><circle cx="37" cy="50" r="3.5"/>
+      <circle cx="63" cy="50" r="3.5"/><circle cx="70" cy="50" r="3.5"/><circle cx="78" cy="50" r="3.5"/>
+      <circle cx="30" cy="30" r="3.5"/><circle cx="70" cy="30" r="3.5"/><circle cx="30" cy="70" r="3.5"/><circle cx="70" cy="70" r="3.5"/></g>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Desde sempre em Balneário Camboriú</div>
+    <h1>Sabor que vira <em>tradição</em><br>na sua mesa.</h1>
+    <p>Rodízio de pizzas artesanais, massas fresquinhas, o famoso frango a passarinho e sobremesas irresistíveis — tudo em um ambiente aconchegante, perfeito para a família inteira.</p>
+    <div class="hero-cta">
+      <a class="btn-primary" href="#cardapio">🍕 Ver Cardápio & Pedir</a>
+      <a class="btn-outline" href="#infos">📍 Como Chegar</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><b>4,4 ★</b><span>3.591 avaliações</span></div>
+      <div class="stat"><b>+3.500</b><span>Clientes felizes</span></div>
+      <div class="stat"><b>Kids</b><span>Espaço infantil</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint"><div class="mouse"></div>Role</div>
+</header>
+
+<!-- MARQUEE -->
+<div class="marquee"><div class="marquee-track" id="marquee">
+  <span>Rodízio de Pizzas <i>✦</i> Massas Artesanais <i>✦</i> Frango a Passarinho <i>✦</i> Espaço Kids <i>✦</i> Sobremesas <i>✦</i> Coquetéis <i>✦</i> Buffet à Vontade <i>✦</i></span>
+</div></div>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="section-inner about-grid">
+    <div class="about-visual reveal">
+      <div class="about-frame"><div class="glow"></div></div>
+      <div class="badge-float bf1"><span class="ic">⭐</span><div><b>4,4 estrelas</b><span>3.591 avaliações no Google</span></div></div>
+      <div class="badge-float bf2"><span class="ic">👨‍👩‍👧‍👦</span><div><b>Perfeito p/ família</b><span>Espaço kids + fraldário</span></div></div>
+    </div>
+    <div>
+      <div class="section-tag reveal">Nossa História</div>
+      <h2 class="section-title reveal d1">Uma cantina <em>acolhedora</em> no coração de BC</h2>
+      <p class="section-sub reveal d2">Tradicional cantina de cardápio variado: massas, sopas e pizzas salgadas e doces — algumas ainda com sorvete! Um clima animado, garçons atenciosos que servem direto na sua mesa e aquela massa de pizza que conquista gerações.</p>
+      <div class="about-list">
+        <div class="about-item reveal d1"><span class="ic">🍝</span><b>Massas frescas</b><span>Espaguete, nhoque, rondelli, canelone e yakisoba preparados na hora.</span></div>
+        <div class="about-item reveal d2"><span class="ic">🍕</span><b>Rodízio completo</b><span>Pizzas salgadas e doces passando sem parar na sua mesa.</span></div>
+        <div class="about-item reveal d3"><span class="ic">🍗</span><b>Frango c/ polenta</b><span>O clássico frango a passarinho com polenta branca, meia ou inteira.</span></div>
+        <div class="about-item reveal d4"><span class="ic">🍨</span><b>Sobremesas</b><span>Pizza de banana com gemada, sensação de morango com sorvete e mais.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CARDÁPIO -->
+<section id="cardapio">
+  <div class="section-inner">
+    <div class="menu-head">
+      <div class="section-tag reveal" style="justify-content:center">Peça Direto Aqui</div>
+      <h2 class="section-title reveal d1">Nosso <em>Cardápio</em></h2>
+      <p class="section-sub reveal d2" style="margin:0 auto">Monte seu pedido no carrinho e envie direto pelo WhatsApp. Rápido, prático e sem fila!</p>
+    </div>
+    <div class="tabs reveal" id="tabs"></div>
+    <div class="menu-grid" id="menuGrid"></div>
+    <p style="text-align:center;color:#6f6152;font-size:.72rem;margin-top:28px">* Valores do cardápio de referência. Preços podem variar — confirme no momento do pedido.</p>
+  </div>
+</section>
+
+<!-- AVALIAÇÕES -->
+<section id="avaliacoes">
+  <div class="section-inner">
+    <div style="text-align:center" class="menu-head">
+      <div class="section-tag reveal" style="justify-content:center">Quem Provou, Aprovou</div>
+      <h2 class="section-title reveal d1">O que dizem nossos <em>clientes</em></h2>
+    </div>
+    <div class="reviews-grid">
+      <div class="review reveal d1">
+        <div class="stars">★★★★★</div>
+        <p>"Simplesmente incrível, a melhor pizzaria que já fui!!! Não tenho nenhum defeito pra dizer sobre eles."</p>
+        <div class="who"><div class="avatar">J</div><div><b>Júlia Martins</b><span>Avaliação Google</span></div></div>
+      </div>
+      <div class="review reveal d2">
+        <div class="stars">★★★★★</div>
+        <p>"Rodízio de pizza, massas, frango a passarinho e sem falar no espaço kids. Sempre uma ótima experiência!"</p>
+        <div class="who"><div class="avatar">E</div><div><b>Elionai Lima</b><span>Avaliação Google</span></div></div>
+      </div>
+      <div class="review reveal d3">
+        <div class="stars">★★★★★</div>
+        <p>"Sempre pizza saborosa e excelente atendimento, sem dizer no espaço das crianças. Recomendo de olhos fechados!"</p>
+        <div class="who"><div class="avatar">J</div><div><b>Jessica Oliveira</b><span>Avaliação Google</span></div></div>
+      </div>
+    </div>
+    <div class="rating-summary reveal">
+      <div class="big-score"><b>4,4</b><span>Nota média</span></div>
+      <div class="big-score"><b>3.591</b><span>Avaliações</span></div>
+      <div class="big-score"><b>#1</b><span>Escolha em família</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- INFOS -->
+<section id="infos">
+  <div class="section-inner">
+    <div class="section-tag reveal">Informações</div>
+    <h2 class="section-title reveal d1">Venha nos <em>visitar</em></h2>
+    <div class="info-grid">
+      <div class="info-card reveal d1">
+        <span class="ic">📍</span>
+        <h3>Endereço</h3>
+        <p>Av. Marginal Oeste, 67 — Vila Real<br>Balneário Camboriú · SC<br>CEP 88337-000</p>
+        <a class="btn-outline" style="margin-top:16px;padding:10px 22px;font-size:.8rem" href="https://www.google.com/maps/search/?api=1&query=Av.+Marginal+Oeste,+67+-+Vila+Real,+Balne%C3%A1rio+Cambori%C3%BA+-+SC" target="_blank" rel="noopener">Traçar Rota</a>
+      </div>
+      <div class="info-card reveal d2">
+        <span class="ic">🕖</span>
+        <h3>Horário</h3>
+        <p>Terça a Domingo<br>Abre às <b style="color:var(--accent3)">19:00</b></p>
+        <div class="open-now"><span class="dot"></span> Aberto à noite p/ você</div>
+        <p style="margin-top:10px">📞 (47) 3361-3131</p>
+      </div>
+      <div class="info-card reveal d3">
+        <span class="ic">🚗</span>
+        <h3>Comodidades</h3>
+        <ul>
+          <li>Estacionamento amplo e gratuito</li>
+          <li>Acessibilidade completa</li>
+          <li>Espaço kids + fraldário</li>
+          <li>Aceita reservas p/ jantar</li>
+        </ul>
+      </div>
+      <div class="info-card reveal d4">
+        <span class="ic">💳</span>
+        <h3>Pagamento</h3>
+        <ul>
+          <li>Cartão de crédito e débito</li>
+          <li>Pix e NFC no celular</li>
+          <li>Alelo e Vale Refeição</li>
+          <li>Dinheiro</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="padding-top:0">
+  <div class="cta-banner reveal">
+    <div class="section-tag" style="justify-content:center">Bateu a fome?</div>
+    <h2>Peça agora e receba <em style="color:var(--accent3)">quentinho</em>!</h2>
+    <p>Entrega sem contato, retirada no balcão ou aquele jantar tranquilo no salão. Você escolhe, a gente prepara.</p>
+    <div class="hero-cta">
+      <a class="btn-primary" href="#cardapio">🛒 Montar Meu Pedido</a>
+      <a class="btn-outline" href="tel:+554733613131">📞 Ligar p/ Reservar</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col" style="max-width:340px">
+      <div class="logo"><div class="logo-mark">B</div><div class="logo-text"><b>La Barrica</b><span>Pizzaria · Cantina</span></div></div>
+      <p>Tradicional cantina de Balneário Camboriú com cardápio variado, massas, sopas, pizzas salgadas e doces com sorvete. Clima animado e acolhedor.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegação</h4>
+      <a href="#sobre">Sobre nós</a>
+      <a href="#cardapio">Cardápio</a>
+      <a href="#avaliacoes">Avaliações</a>
+      <a href="#infos">Informações</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <a href="tel:+554733613131">(47) 3361-3131</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Av.+Marginal+Oeste,+67+-+Vila+Real,+Balne%C3%A1rio+Cambori%C3%BA+-+SC" target="_blank" rel="noopener">Av. Marginal Oeste, 67 — Vila Real</a>
+      <a href="#cardapio">Pedir on-line</a>
+    </div>
+    <div class="footer-col">
+      <h4>Ideal Para</h4>
+      <a href="#infos">Jantar em família</a>
+      <a href="#infos">Aniversários infantis</a>
+      <a href="#infos">Grupos e turistas</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 La Barrica · Balneário Camboriú/SC — Site demonstrativo. Todos os direitos reservados.</div>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="Carrinho de pedidos">
+  <div class="drawer-head">
+    <h3>🛒 Meu Pedido</h3>
+    <button class="drawer-close" id="closeCart">✕</button>
+  </div>
+  <div class="drawer-items" id="drawerItems"></div>
+  <div class="drawer-foot">
+    <div class="delivery-opts">
+      <label><input type="radio" name="delivery" value="Entrega" checked><span>🛵 Entrega</span></label>
+      <label><input type="radio" name="delivery" value="Retirada"><span>🛍️ Retirada</span></label>
+    </div>
+    <input class="field" id="custName" placeholder="Seu nome *">
+    <input class="field" id="custAddr" placeholder="Endereço de entrega *">
+    <div class="total-row grand"><span>Total</span><b id="cartTotal">R$ 0,00</b></div>
+    <button class="btn-checkout" id="checkoutBtn" disabled>📲 Enviar Pedido via WhatsApp</button>
+  </div>
+</aside>
+
+<!-- ORDER MODAL -->
+<div class="modal" id="orderModal">
+  <div class="modal-box">
+    <h3>✅ Pedido Enviado!</h3>
+    <p class="sub">Obrigado! Seu pedido foi encaminhado para o WhatsApp do La Barrica.</p>
+    <div class="order-lines" id="orderSummary"></div>
+    <button class="btn-primary" style="width:100%;justify-content:center;margin-top:6px" id="closeModal">Fechar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">✅ Adicionado ao pedido!</div>
+
+<script>
+/* ================= DATA ================= */
+const MENU = [
+ {cat:"Pizzas", items:[
+  {id:"p1", name:"Mussarela", desc:"A clássica: mussarela derretida, orégano e molho de tomate da casa.", price:54.90, emoji:"🍕"},
+  {id:"p2", name:"Calabresa", desc:"Calabresa fatiada, cebola e orégano na massa tradicional.", price:59.90, emoji:"🍕"},
+  {id:"p3", name:"Portuguesa", desc:"Presunto, ovo, cebola, azeitona e pimentão.", price:64.90, emoji:"🍕"},
+  {id:"p4", name:"4 Queijos", desc:"Mussarela, parmesão, provolone e catupiry.", price:66.90, emoji:"🍕"},
+  {id:"p5", name:"Marguerita", desc:"Mussarela, tomate fresco, manjericão e azeite.", price:62.90, emoji:"🍕"},
+  {id:"p6", name:"Coração", desc:"Coração de frango temperado e suculento com cebola.", price:66.90, emoji:"🍕"},
+  {id:"p7", name:"Strogonoff de Carne", desc:"Carne em tiras ao molho strogonoff cremoso com champignon.", price:69.90, emoji:"🍕", best:true},
+  {id:"p8", name:"Siciliana", desc:"Escarola, bacon, alho frito e parmesão no estilo siciliano.", price:66.90, emoji:"🍕"},
+  {id:"p9", name:"Brócolis com Bacon", desc:"Brócolis fresco salteado com crocantes pedaços de bacon.", price:64.90, emoji:"🍕"},
+  {id:"p10", name:"Sensação", desc:"Creme de frango com milho e toque especial da casa.", price:64.90, emoji:"🍕"},
+  {id:"p11", name:"Frango c/ Catupiry", desc:"Frango desfiado generoso com cremoso catupiry original.", price:62.90, emoji:"🍕", best:true},
+  {id:"p12", name:"Camarão", desc:"Camarões frescos com catupiry e toque de limão siciliano.", price:74.90, emoji:"🍕", best:true},
+  {id:"p13", name:"Milho Verde", desc:"Milho verde cremoso com mussarela e orégano.", price:58.90, emoji:"🍕"},
+  {id:"p14", name:"Banana c/ Gemada", desc:"A famosa doce! Banana caramelizada com gemada quentinha.", price:54.90, emoji:"🍌", best:true},
+  {id:"p15", name:"Prestígio", desc:"Chocolate ao leite com coco fresco ralado.", price:54.90, emoji:"🥥"},
+  {id:"p16", name:"Morango c/ Chocolate Preto", desc:"Morangos frescos cobertos com chocolate meio amargo.", price:56.90, emoji:"🍓"},
+  {id:"p17", name:"Banana Nevada", desc:"Banana com açúcar e canela, coberta de marshmallow tostado.", price:54.90, emoji:"🍌"},
+  {id:"p18", name:"Charge", desc:"Doce de leite com amendoim torrado, estilo charge.", price:54.90, emoji:"🥜"},
+  {id:"p19", name:"Chocolate", desc:"Chocolate derretido generoso sobre a massa doce.", price:52.90, emoji:"🍫"},
+  {id:"p20", name:"Chocolate Branco c/ Sorvete", desc:"Chocolate branco cremoso finalizado com bola de sorvete.", price:56.90, emoji:"🍨"},
+  {id:"p21", name:"Sensação Morango", desc:"Morango com chocolate branco e cobertura de ganache.", price:56.90, emoji:"🍓", best:true},
+ ]},
+ {cat:"Massas", items:[
+  {id:"m1", name:"Espaguete à Carbonara", desc:"Molho branco, bacon frito, ovos e creme de leite.", price:85.00, emoji:"🍝"},
+  {id:"m2", name:"Penne à Moda da Casa", desc:"Brócolis, tomate seco, champignon, frango, bacon e creme de leite.", price:85.00, emoji:"🍝", best:true},
+  {id:"m3", name:"Nhoque à Bolonhesa", desc:"Nhoque macio com ragu bolonhesa da casa.", price:85.00, emoji:"🍝"},
+  {id:"m4", name:"Rondelli de Brócolis", desc:"Recheio de brócolis, molho branco e catupiry gratinado.", price:85.00, emoji:"🍝"},
+  {id:"m5", name:"Canelone", desc:"Queijo, presunto e molho branco gratinado.", price:85.00, emoji:"🍝"},
+  {id:"m6", name:"Yakisoba", desc:"Macarrão oriental com legumes e carnes salteados.", price:85.00, emoji:"🍜"},
+ ]},
+ {cat:"Frango & Porções", items:[
+  {id:"f1", name:"Frango Frito + Polenta Branca", desc:"O clássico! Frango a passarinho crocante com polenta.", price:85.00, emoji:"🍗", best:true},
+  {id:"f2", name:"Frango Frito + Polenta (Meia)", desc:"A mesma delícia em meia porção, ideal p/ 2 pessoas.", price:45.00, emoji:"🍗"},
+ ]},
+ {cat:"Bebidas", items:[
+  {id:"b1", name:"Refrigerante Lata 350ml", desc:"Coca-Cola, Coca Zero, Fanta Laranja, Fanta Uva ou Schweppes.", price:8.00, emoji:"🥤"},
+  {id:"b2", name:"Refrigerante 2L", desc:"Coca-Cola, Coca Zero ou Fanta Laranja para a família toda.", price:17.00, emoji:"🥤"},
+  {id:"b3", name:"Cerveja Itaipava Malzbier", desc:"Long neck gelada para acompanhar sua pizza.", price:8.00, emoji:"🍺"},
+  {id:"b4", name:"Vinho da Casa", desc:"Taça de vinho selecionado para harmonizar com as massas.", price:22.00, emoji:"🍷"},
+ ]},
+ {cat:"Sobremesas", items:[
+  {id:"s1", name:"Sensação de Morango c/ Sorvete", desc:"Morango com chocolate acompanhado de sorvete cremoso.", price:24.90, emoji:"🍓", best:true},
+  {id:"s2", name:"Vanilla Ice Cream", desc:"Bola generosa de sorvete de creme artesanal.", price:14.90, emoji:"🍨"},
+  {id:"s3", name:"Baklava", desc:"Sobremesa turca de massa folhada com mel e castanhas.", price:19.90, emoji:"🧁"},
+ ]},
+];
+const WHATSAPP = "554733613131";
+const BRL = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+
+/* ================= RENDER MENU ================= */
+const tabsEl = document.getElementById("tabs");
+const gridEl = document.getElementById("menuGrid");
+MENU.forEach((c,i)=>{
+  const b=document.createElement("button");
+  b.className="tab"+(i===0?" active":"");
+  b.textContent=c.cat;
+  b.onclick=()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));b.classList.add("active");renderItems(c.cat);};
+  tabsEl.appendChild(b);
+});
+function renderItems(cat){
+  gridEl.innerHTML="";
+  const items=MENU.find(c=>c.cat===cat).items;
+  items.forEach((it,idx)=>{
+    const card=document.createElement("div");
+    card.className="dish";
+    card.innerHTML=`
+      ${it.best?'<div class="tag-best">Mais Pedido</div>':''}
+      <div class="top">
+        <div><h3>${it.name}</h3></div>
+        <div class="dish-emoji">${it.emoji}</div>
+      </div>
+      <p class="desc">${it.desc}</p>
+      <div class="foot">
+        <div class="price">${BRL(it.price)}<small>por unidade</small></div>
+        <button class="btn-add" onclick="addToCart('${it.id}',this)">＋ Pedir</button>
+      </div>`;
+    gridEl.appendChild(card);
+    setTimeout(()=>card.classList.add("show"),60*idx);
+  });
+}
+renderItems("Pizzas");
+
+/* ================= CART ================= */
+let cart={}; // id -> qty
+const drawer=document.getElementById("drawer"), overlay=document.getElementById("overlay");
+function openDrawer(){drawer.classList.add("open");overlay.classList.add("open");document.body.style.overflow="hidden"}
+function closeDrawer(){drawer.classList.remove("open");overlay.classList.remove("open");document.body.style.overflow=""}
+document.getElementById("openCart").onclick=openDrawer;
+document.getElementById("closeCart").onclick=closeDrawer;
+overlay.onclick=closeDrawer;
+
+function addToCart(id,btn){
+  cart[id]=(cart[id]||0)+1;
+  if(btn){btn.classList.add("added");btn.textContent="✓ Adicionado";
+    setTimeout(()=>{btn.classList.remove("added");btn.textContent="＋ Pedir"},1200);}
+  const cc=document.getElementById("cartCount");
+  cc.classList.add("pop");setTimeout(()=>cc.classList.remove("pop"),300);
+  renderCart(); showToast();
+}
+function changeQty(id,delta){
+  cart[id]=(cart[id]||0)+delta;
+  if(cart[id]<=0)delete cart[id];
+  renderCart();
+}
+function removeItem(id){delete cart[id];renderCart()}
+function cartEntries(){return Object.entries(cart).map(([id,qty])=>{const it=MENU.flatMap(c=>c.items).find(x=>x.id===id);return{...it,qty}})}
+function renderCart(){
+  const box=document.getElementById("drawerItems");
+  const entries=cartEntries();
+  const count=entries.reduce((s,e)=>s+e.qty,0);
+  const total=entries.reduce((s,e)=>s+e.qty*e.price,0);
+  document.getElementById("cartCount").textContent=count;
+  document.getElementById("cartTotal").textContent=BRL(total);
+  document.getElementById("checkoutBtn").disabled=count===0;
+  if(!entries.length){box.innerHTML='<div class="empty-cart"><span>🛒</span>Seu pedido está vazio.<br>Que tal escolher uma pizza?</div>';return}
+  box.innerHTML=entries.map(e=>`
+    <div class="cart-item">
+      <div class="ci-emoji">${e.emoji}</div>
+      <div class="ci-info"><b>${e.name}</b><small>${BRL(e.price)} un.</small></div>
+      <div class="qty">
+        <button onclick="changeQty('${e.id}',-1)">−</button><span>${e.qty}</span><button onclick="changeQty('${e.id}',1)">＋</button>
+      </div>
+      <div class="ci-price">${BRL(e.qty*e.price)}</div>
+      <button class="ci-remove" onclick="removeItem('${e.id}')">🗑</button>
+    </div>`).join("");
+}
+renderCart();
+
+/* toast */
+let toastT;
+function showToast(){
+  const t=document.getElementById("toast");
+  t.classList.add("show");clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove("show"),1800);
+}
+
+/* ================= CHECKOUT ================= */
+document.getElementById("checkoutBtn").onclick=()=>{
+  const entries=cartEntries();
+  if(!entries.length)return;
+  const name=document.getElementById("custName").value.trim();
+  const addr=document.getElementById("custAddr").value.trim();
+  const mode=document.querySelector('input[name="delivery"]:checked').value;
+  if(!name){document.getElementById("custName").focus();document.getElementById("custName").style.borderColor="#c0392b";return}
+  if(mode==="Entrega"&&!addr){document.getElementById("custAddr").focus();document.getElementById("custAddr").style.borderColor="#c0392b";return}
+  const total=entries.reduce((s,e)=>s+e.qty*e.price,0);
+  let msg=`🍕 *NOVO PEDIDO — LA BARRICA*\n\n👤 Cliente: ${name}\n📦 Tipo: ${mode}\n${mode==="Entrega"?"📍 Endereço: "+addr+"\n":""}\n*Itens:*\n`;
+  entries.forEach(e=>msg+=`• ${e.qty}x ${e.name} — ${BRL(e.qty*e.price)}\n`);
+  msg+=`\n💰 *Total: ${BRL(total)}*\n\nPedido feito pelo site. Aguardo confirmação! ✅`;
+  /* summary modal */
+  document.getElementById("orderSummary").innerHTML=
+    entries.map(e=>`<div class="order-line"><span>${e.qty}x ${e.name}</span><span>${BRL(e.qty*e.price)}</span></div>`).join("")
+    +`<div class="order-total"><span>Total</span><span style="color:var(--accent3)">${BRL(total)}</span></div>`;
+  closeDrawer();
+  document.getElementById("orderModal").classList.add("open");
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank");
+};
+document.getElementById("closeModal").onclick=()=>{document.getElementById("orderModal").classList.remove("open");cart={};renderCart()};
+
+/* delivery toggle address */
+document.querySelectorAll('input[name="delivery"]').forEach(r=>r.addEventListener("change",e=>{
+  document.getElementById("custAddr").style.display=e.target.value==="Entrega"?"block":"none";
+}));
+
+/* ================= NAV / SCROLL FX ================= */
+const nav=document.getElementById("nav");
+window.addEventListener("scroll",()=>nav.classList.toggle("scrolled",scrollY>40),{passive:true});
+const burger=document.getElementById("burger"),navLinks=document.getElementById("navLinks");
+burger.onclick=()=>{burger.classList.toggle("active");navLinks.classList.toggle("open")};
+navLinks.querySelectorAll("a").forEach(a=>a.onclick=()=>{burger.classList.remove("active");navLinks.classList.remove("open")});
+
+/* reveal on scroll */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+/* marquee duplicate */
+const mq=document.getElementById("marquee");
+mq.innerHTML+=mq.innerHTML;
+
+/* GSAP hero entrance */
+if(window.gsap){
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.from(".hero-eyebrow",{y:30,opacity:0,duration:.9,ease:"power3.out",delay:.1});
+  gsap.from(".hero h1",{y:50,opacity:0,duration:1.1,ease:"power3.out",delay:.25});
+  gsap.from(".hero p",{y:30,opacity:0,duration:1,ease:"power3.out",delay:.45});
+  gsap.from(".hero-cta",{y:30,opacity:0,duration:1,ease:"power3.out",delay:.6});
+  gsap.from(".hero-stats .stat",{y:30,opacity:0,duration:.8,stagger:.12,ease:"power3.out",delay:.8});
+}
+</script>
+</body>
+</html>
