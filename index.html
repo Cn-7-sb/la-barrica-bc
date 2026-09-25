@@ -134,7 +134,18 @@ section{padding:clamp(70px,10vw,120px) clamp(18px,6vw,80px);position:relative}
 .about-visual{position:relative}
 .about-frame{border-radius:var(--radius);overflow:hidden;position:relative;aspect-ratio:4/4.6;background:
   linear-gradient(160deg,#2c1e12,#1a110b 70%);box-shadow:var(--shadow)}
-.about-frame::before{content:"🍕";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(6rem,14vw,10rem);filter:drop-shadow(0 24px 40px rgba(0,0,0,.5))}
+.about-frame::before{
+  content:"";
+}
+  .about-poster{
+  position:relative;
+  z-index:2;
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  border-radius:var(--radius);
+}
 .about-frame .glow{position:absolute;width:200%;height:200%;top:-50%;left:-50%;background:radial-gradient(circle,rgba(232,161,61,.25),transparent 60%);animation:glowmove 9s ease-in-out infinite alternate}
 @keyframes glowmove{from{transform:translate(-12%,-8%)}to{transform:translate(12%,10%)}}
 .badge-float{position:absolute;background:rgba(30,21,14,.92);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;
